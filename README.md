@@ -1,14 +1,25 @@
+# Generate
+Generate go file from FlatBuffers schema
+```
+$ flatc --go --gen-object-api schema/fbs/user.fbs
+```
+
+Generate testdata
+```
+$ go run cmd/generate.go 
+```
+
 # Run
 ```bash
 $ go run main.go -b=false
 Alloc = 180 KB
-Alloc = 195 K
-Alloc = 198 K
+Alloc = 209 KB
+Alloc = 211 KB
 ```
 
 ```bash
 $ go run main.go -b=true
-Alloc = 180 KB
-Alloc = 1059 K
-Alloc = 1061 K
+Alloc = 181 KB
+Alloc = 4431 KB
+Alloc = 4433 KB
 ```

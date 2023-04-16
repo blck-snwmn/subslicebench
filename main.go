@@ -6,25 +6,33 @@ import (
 	"io"
 	"io/ioutil"
 	"runtime"
+
+	"github.com/blck-snwmn/subslicebench/cmd/schema/fbs"
 )
 
-func read(filename string) []byte {
+func read(filename string) *fbs.UserPositions {
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
-	return b
+	return fbs.GetSizePrefixedRootAsUserPositions(b, 0)
 }
 
 func open(filename string) []byte {
-	var buf = make([]byte, 2)
 	b := read(filename)
-	copy(buf, b)
-	return buf
+	var p fbs.UserPosition
+	b.Poss(&p, 0)
+	nametmp := p.Name()
+	name := make([]byte, len(nametmp))
+	copy(name, nametmp)
+	return name
 }
+
 func open2(filename string) []byte {
 	b := read(filename)
-	return b[0:2]
+	var p fbs.UserPosition
+	b.Poss(&p, 0)
+	return p.Name()
 }
 
 func gen() map[int][]byte {
@@ -40,7 +48,7 @@ func main() {
 	fmt.Printf("Alloc = %v KB\n", memStats.Alloc/1024)
 	runtime.GC()
 	mm := gen()
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		var f func(string) []byte
 		if *use2 {
 			f = open2

@@ -1,0 +1,19 @@
+namespace schema.fbs;
+
+struct Position {
+  x: float;
+  y: float;
+  z: float;
+}
+
+table UserPosition {
+  name: string;
+  pos: Position;
+}
+
+table UserPositions {
+  poss: [UserPosition]; 
+}
+
+
+root_type UserPositions;
